@@ -121,7 +121,7 @@ const DailyActivityTracker = () => {
     <>
       <style>{styles}</style>
       <div className="tracker-container">
-        <h1 className="tracker-title">일일 활동 추적기</h1>
+        <h1 className="tracker-title">Do Did Done</h1>
 
         <div className="button-grid">
           {activities.map((activity) => (
