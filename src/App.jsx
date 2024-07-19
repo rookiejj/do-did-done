@@ -8,6 +8,7 @@ import DailyActivityTracker from "./components/DailyActivityTracker";
 import { createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { GithubCustomTheme } from "./util/supabase-custom-theme";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -31,12 +32,31 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  return (
+    <div className="App">
+      <div className="Auth">
+        {!session ? (
+          <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: GithubCustomTheme,
+            }}
+            providers={["github"]}
+            onlyThirdPartyProviders={true}
+          />
+        ) : (
+          <Logout />
+        )}
+      </div>
+    </div>
+  );
+
   if (!session) {
     return (
       <Auth
         supabaseClient={supabase}
         appearance={{ theme: ThemeSupa }}
-        providers={["github", "google"]}
+        providers={["github"]}
         onlyThirdPartyProviders={true}
       />
     );
