@@ -9,6 +9,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { GithubCustomTheme } from "./util/supabase-custom-theme";
+import Header from "./components/Header";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -34,18 +35,24 @@ function App() {
 
   return (
     <div className="App">
+      <Header title={"Do Did Done"} />
       <div className="Auth">
         {!session ? (
-          <Auth
-            supabaseClient={supabase}
-            appearance={{
-              theme: GithubCustomTheme,
-            }}
-            providers={["github"]}
-            onlyThirdPartyProviders={true}
-          />
+          <div className="login">
+            <Auth
+              supabaseClient={supabase}
+              appearance={GithubCustomTheme}
+              providers={["github"]}
+              onlyThirdPartyProviders={true}
+            />
+          </div>
         ) : (
-          <Logout />
+          <div>
+            <div className="logout">
+              <Logout />
+            </div>
+            <DailyActivityTracker />
+          </div>
         )}
       </div>
     </div>
@@ -81,7 +88,7 @@ function App() {
         <div>
           <Login></Login>
           <button />
-          {/* <DailyActivityTracker /> */}
+          <DailyActivityTracker />
         </div>
       </>
     );

@@ -1,0 +1,17 @@
+.Logout {
+  margin-bottom: 20px;
+}
+
+.Logout .button {
+  padding: 10px 30px;
+  border-radius: 5px;
+  border: 2px solid #bbbbbb;
+  border-width: 1px;
+  background-color: white;
+  color: #888888;
+}
+
+.Logout .button:hover {
+  background-color: #bbbbbb;
+  color: black;
+}

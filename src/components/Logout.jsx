@@ -1,4 +1,5 @@
 import { supabase } from "../App";
+import "./Logout.css";
 
 const Logout = () => {
   const handleLogout = async () => {
@@ -11,9 +12,10 @@ const Logout = () => {
 
   return (
     <>
-      <div>
-        <h1>Supabase Auth</h1>
-        <button onClick={handleLogout}>Logout</button>
+      <div className="Logout">
+        <button className="button" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </>
   );
