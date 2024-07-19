@@ -10,6 +10,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { GithubCustomTheme } from "./util/supabase-custom-theme";
 import Header from "./components/Header";
+import Account from "./components/Account";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -51,7 +52,7 @@ function App() {
             <div className="logout">
               <Logout />
             </div>
-            <DailyActivityTracker />
+            <Account key={session.user.id} session={session} />
           </div>
         )}
       </div>
