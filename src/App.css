@@ -13,3 +13,12 @@
   display: flex;
   justify-content: right;
 }
+
+.App .main_menu {
+  display: flex;
+  justify-content: right;
+}
+
+.App .daily_activity_tracker {
+  margin: 20px 0px;
+}

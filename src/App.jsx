@@ -11,6 +11,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { GithubCustomTheme } from "./util/supabase-custom-theme";
 import Header from "./components/Header";
 import Account from "./components/Account";
+import Button from "./components/Button";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -49,10 +50,16 @@ function App() {
           </div>
         ) : (
           <div>
-            <div className="logout">
-              <Logout />
+            <div className="main_menu">
+              <Button title={"My Page"}></Button>
+              <div className="logout">
+                <Logout />
+              </div>
             </div>
-            <Account key={session.user.id} session={session} />
+            <div className="daily_activity_tracker">
+              <DailyActivityTracker />
+            </div>
+            {/* <Account key={session.user.id} session={session} /> */}
           </div>
         )}
       </div>

@@ -6,7 +6,9 @@ const activities = ["기상", "산책", "식사", "운동", "스터디", "간식
 const styles = `
   .tracker-container {
     padding: 24px;
-    max-width: 400px;
+    width: 50%;
+    min-width: 300px;
+    // max-width: 400px;
     margin: 0 auto;
     background-color: #f9fafb;
     border-radius: 24px;

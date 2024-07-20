@@ -1,4 +1,5 @@
 import { supabase } from "../App";
+import Button from "./Button";
 import "./Logout.css";
 
 const Logout = () => {
@@ -13,9 +14,7 @@ const Logout = () => {
   return (
     <>
       <div className="Logout">
-        <button className="button" onClick={handleLogout}>
-          Log Out
-        </button>
+        <Button onClick={handleLogout} title={"Log Out"}></Button>
       </div>
     </>
   );
