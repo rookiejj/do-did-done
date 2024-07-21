@@ -51,7 +51,7 @@ function App() {
         ) : (
           <div>
             <div className="main_menu">
-              <Button title={"My Page"}></Button>
+              <Button title={"My Page"} />
               <div className="logout">
                 <Logout />
               </div>
