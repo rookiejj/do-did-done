@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 
 import Login from "./components/Login";
@@ -10,8 +11,9 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { GithubCustomTheme } from "./util/supabase-custom-theme";
 import Header from "./components/Header";
-import Account from "./components/Account";
+import Account from "./pages/Account";
 import Button from "./components/Button";
+import NotFound from "./pages/NotFound";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -19,6 +21,8 @@ export const supabase = createClient(
 );
 
 function App() {
+  const navigation = useNavigate();
+
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -35,11 +39,23 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const handleMyPageNavigation = () => {
+    const data = { key: session.user.id, session: session };
+    navigation("/mypage", { state: data });
+  };
+
   return (
     <div className="App">
       <Header title={"Do Did Done"} />
-      <div className="Auth">
-        {!session ? (
+      <div>
+        {session ? (
+          <div className="main_menu">
+            <Button title={"My Page"} onClick={handleMyPageNavigation} />
+            <div className="logout">
+              <Logout />
+            </div>
+          </div>
+        ) : (
           <div className="login">
             <Auth
               supabaseClient={supabase}
@@ -48,59 +64,16 @@ function App() {
               onlyThirdPartyProviders={true}
             />
           </div>
-        ) : (
-          <div>
-            <div className="main_menu">
-              <Button title={"My Page"} />
-              <div className="logout">
-                <Logout />
-              </div>
-            </div>
-            <div className="daily_activity_tracker">
-              <DailyActivityTracker />
-            </div>
-            {/* <Account key={session.user.id} session={session} /> */}
-          </div>
         )}
       </div>
+
+      <Routes>
+        <Route path="/" element={<DailyActivityTracker />} />
+        <Route path="/mypage" element={<Account />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
-
-  if (!session) {
-    return (
-      <Auth
-        supabaseClient={supabase}
-        appearance={{ theme: ThemeSupa }}
-        providers={["github"]}
-        onlyThirdPartyProviders={true}
-      />
-    );
-  } else {
-    return (
-      <>
-        <Logout />
-      </>
-    );
-  }
-
-  console.log(session);
-  if (session) {
-    return (
-      <>
-        <Logout />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <div>
-          <Login></Login>
-          <button />
-          <DailyActivityTracker />
-        </div>
-      </>
-    );
-  }
 }
 
 export default App;

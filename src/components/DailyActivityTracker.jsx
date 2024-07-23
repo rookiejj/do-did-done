@@ -1,3 +1,4 @@
+import "./DailyActivityTracker.css";
 import React, { useState, useEffect } from "react";
 
 const activities = ["기상", "산책", "식사", "운동", "스터디", "간식"];
@@ -120,7 +121,7 @@ const DailyActivityTracker = () => {
   };
 
   return (
-    <>
+    <div className="DailyActivityTracker">
       <style>{styles}</style>
       <div className="tracker-container">
         {/* <h1 className="tracker-title">Do Did Done</h1> */}
@@ -163,7 +164,7 @@ const DailyActivityTracker = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

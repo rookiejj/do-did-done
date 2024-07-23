@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../App";
+import { useLocation } from "react-router-dom";
 
-export default function Account({ session }) {
+export default function Account() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(null);
   const [website, setWebsite] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
+
+  const location = useLocation();
+  const session = location.state.session;
 
   useEffect(() => {
     let ignore = false;
@@ -99,16 +103,6 @@ export default function Account({ session }) {
           {loading ? "Loading ..." : "Update"}
         </button>
       </div>
-
-      {/* <div>
-        <button
-          className="button block"
-          type="button"
-          onClick={() => supabase.auth.signOut()}
-        >
-          Sign Out
-        </button>
-      </div> */}
     </form>
   );
 }
