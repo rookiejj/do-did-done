@@ -1,3 +1,4 @@
+import "./Account.css";
 import { useState, useEffect } from "react";
 import { supabase } from "../App";
 import { useLocation } from "react-router-dom";
@@ -68,41 +69,51 @@ export default function Account() {
   }
 
   return (
-    <form onSubmit={updateProfile} className="form-widget">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={session.user.email} disabled />
-      </div>
-      <div>
-        <label htmlFor="username">Name</label>
-        <input
-          id="username"
-          type="text"
-          required
-          value={username || ""}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="url"
-          value={website || ""}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </div>
+    <div className="toss-account-container">
+      <h1 className="toss-title">계정 정보</h1>
+      <form onSubmit={updateProfile} className="toss-form">
+        <div className="toss-form-group">
+          <label htmlFor="email" className="toss-label">
+            이메일
+          </label>
+          <input
+            id="email"
+            type="text"
+            value={session.user.email}
+            disabled
+            className="toss-input toss-input-disabled"
+          />
+        </div>
+        <div className="toss-form-group">
+          <label htmlFor="username" className="toss-label">
+            이름
+          </label>
+          <input
+            id="username"
+            type="text"
+            required
+            value={username || ""}
+            onChange={(e) => setUsername(e.target.value)}
+            className="toss-input"
+          />
+        </div>
+        <div className="toss-form-group">
+          <label htmlFor="website" className="toss-label">
+            웹사이트
+          </label>
+          <input
+            id="website"
+            type="url"
+            value={website || ""}
+            onChange={(e) => setWebsite(e.target.value)}
+            className="toss-input"
+          />
+        </div>
 
-      <div>
-        <button
-          className="button block primary"
-          type="submit"
-          disabled={loading}
-          style={{ width: "200px", marginTop: "40px" }}
-        >
-          {loading ? "Loading ..." : "Update"}
+        <button className="toss-button" type="submit" disabled={loading}>
+          {loading ? "업데이트 중..." : "정보 업데이트"}
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
