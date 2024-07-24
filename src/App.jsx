@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useState, useEffect, createContext } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
 
 import Login from "./components/Login";
@@ -7,9 +7,6 @@ import Logout from "./components/Logout";
 import DailyActivityTracker from "./components/DailyActivityTracker";
 
 import { createClient } from "@supabase/supabase-js";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { GithubCustomTheme } from "./util/supabase-custom-theme";
 import Header from "./components/Header";
 import Account from "./pages/Account";
 import Button from "./components/Button";
@@ -20,20 +17,25 @@ export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+export const SessionContext = createContext();
+
 function App() {
   const navigation = useNavigate();
 
   const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setLoading(false);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -42,6 +44,17 @@ function App() {
   const handleMyPageNavigation = () => {
     const data = { key: session.user.id, session: session };
     navigation("/mypage", { state: data });
+  };
+
+  // Protected Route 컴포넌트
+  const ProtectedRoute = ({ children }) => {
+    if (loading) {
+      return <div>로딩 중...</div>; // 또는 로딩 스피너 컴포넌트
+    }
+    if (!session) {
+      return <Navigate to="/login" replace />;
+    }
+    return children;
   };
 
   return (
@@ -56,22 +69,31 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="login">
-            <Auth
-              supabaseClient={supabase}
-              appearance={GithubCustomTheme}
-              providers={["github"]}
-              onlyThirdPartyProviders={true}
-            />
-          </div>
+          <div></div>
         )}
       </div>
-
-      <Routes>
-        <Route path="/" element={<DailyActivityTracker />} />
-        <Route path="/mypage" element={<Account />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <SessionContext.Provider value={session}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <DailyActivityTracker />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/mypage"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </SessionContext.Provider>
     </div>
   );
 }

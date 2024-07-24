@@ -1,5 +1,6 @@
 import "./DailyActivityTracker.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { SessionContext } from "../App";
 
 const activities = ["기상", "산책", "식사", "운동", "스터디", "간식"];
 
@@ -85,6 +86,8 @@ const styles = `
 `;
 
 const DailyActivityTracker = () => {
+  const session = useContext(SessionContext);
+
   const [logs, setLogs] = useState({});
 
   useEffect(() => {
@@ -122,48 +125,52 @@ const DailyActivityTracker = () => {
 
   return (
     <div className="DailyActivityTracker">
-      <style>{styles}</style>
-      <div className="tracker-container">
-        {/* <h1 className="tracker-title">Do Did Done</h1> */}
-
-        <div className="button-grid">
-          {activities.map((activity) => (
-            <button
-              key={activity}
-              onClick={() => logActivity(activity)}
-              className="toss-button"
-            >
-              {activity}
-            </button>
-          ))}
-        </div>
-
+      {!session ? (
+        <div></div>
+      ) : (
         <div>
-          {Object.entries(logs).length > 0 ? (
-            Object.entries(logs)
-              .reverse()
-              .map(([date, activities]) => (
-                <div key={date} className="card">
-                  <div className="card-header">
-                    <h2 className="card-title">{date}</h2>
-                  </div>
-                  <div className="card-content">
-                    <ul className="activity-list">
-                      {activities.map((activity, index) => (
-                        <li key={index} className="activity-item">
-                          <span className="activity-dot"></span>
-                          {activity}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))
-          ) : (
-            <p className="no-activities">아직 기록된 활동이 없습니다.</p>
-          )}
+          <style>{styles}</style>
+          <div className="tracker-container">
+            <div className="button-grid">
+              {activities.map((activity) => (
+                <button
+                  key={activity}
+                  onClick={() => logActivity(activity)}
+                  className="toss-button"
+                >
+                  {activity}
+                </button>
+              ))}
+            </div>
+
+            <div>
+              {Object.entries(logs).length > 0 ? (
+                Object.entries(logs)
+                  .reverse()
+                  .map(([date, activities]) => (
+                    <div key={date} className="card">
+                      <div className="card-header">
+                        <h2 className="card-title">{date}</h2>
+                      </div>
+                      <div className="card-content">
+                        <ul className="activity-list">
+                          {activities.map((activity, index) => (
+                            <li key={index} className="activity-item">
+                              <span className="activity-dot"></span>
+                              {activity}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <p className="no-activities">아직 기록된 활동이 없습니다.</p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

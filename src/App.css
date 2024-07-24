@@ -4,11 +4,6 @@
   text-align: center;
 }
 
-.App .login {
-  display: flex;
-  justify-content: center;
-}
-
 .App .main_menu {
   display: flex;
   justify-content: right;
