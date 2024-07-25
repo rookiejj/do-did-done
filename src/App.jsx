@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import Account from "./pages/Account";
 import Button from "./components/Button";
 import NotFound from "./pages/NotFound";
+import { checkUserProvider } from "./util/check-user-provider";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -24,6 +25,7 @@ function App() {
 
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [social, setSocial] = useState(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -36,6 +38,13 @@ function App() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setLoading(false);
+
+      checkUserProvider().then((result) => {
+        if (result) {
+          // 여기서 UI를 업데이트하거나 다른 작업을 수행
+          setSocial(`logged in ${result.lastUsedProvider}`);
+        }
+      });
     });
 
     return () => subscription.unsubscribe();
@@ -60,6 +69,21 @@ function App() {
   return (
     <div className="App">
       <Header title={"Do Did Done"} />
+      {session ? (
+        <div
+          style={{
+            textAlign: "right",
+            marginBottom: "10px",
+            fontSize: "10px",
+            marginRight: "5px",
+            color: "gray",
+          }}
+        >
+          {social}
+        </div>
+      ) : (
+        <div></div>
+      )}
       <div>
         {session ? (
           <div className="main_menu">

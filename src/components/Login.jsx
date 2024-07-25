@@ -9,7 +9,7 @@ const Login = () => {
       <Auth
         supabaseClient={supabase}
         appearance={GithubCustomTheme}
-        providers={["github"]}
+        providers={["github", "google"]}
         onlyThirdPartyProviders={true}
       />
     </div>

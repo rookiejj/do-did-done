@@ -34,6 +34,11 @@ export const GithubCustomTheme = {
       color: "blue",
       textDecoration: "underline",
     },
+    container: {
+      gap: "30px",
+      display: "flex",
+      flexDirection: "column",
+    },
   },
 };
 
