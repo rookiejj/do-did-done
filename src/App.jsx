@@ -42,7 +42,7 @@ function App() {
       checkUserProvider().then((result) => {
         if (result) {
           // 여기서 UI를 업데이트하거나 다른 작업을 수행
-          setSocial(`logged in ${result.lastUsedProvider}`);
+          setSocial(`signed in with ${result.lastUsedProvider}`);
         }
       });
     });
