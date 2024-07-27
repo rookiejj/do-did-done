@@ -12,10 +12,18 @@ import Account from "./pages/Account";
 import Button from "./components/Button";
 import NotFound from "./pages/NotFound";
 import { checkUserProvider } from "./util/check-user-provider";
+import SupabaseAuthHandler from "./components/SuperbaseAuthHandler";
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+    },
+  }
 );
 
 export const SessionContext = createContext();
@@ -24,20 +32,17 @@ function App() {
   const navigation = useNavigate();
 
   const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [social, setSocial] = useState(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setLoading(false);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      setLoading(false);
 
       checkUserProvider().then((result) => {
         if (result) {
@@ -55,20 +60,12 @@ function App() {
     navigation("/mypage", { state: data });
   };
 
-  // Protected Route 컴포넌트
-  const ProtectedRoute = ({ children }) => {
-    if (loading) {
-      return <div>로딩 중...</div>; // 또는 로딩 스피너 컴포넌트
-    }
-    if (!session) {
-      return <Navigate to="/login" replace />;
-    }
-    return children;
-  };
-
   return (
     <div className="App">
-      <Header title={"Do Did Done"} />
+      <Header
+        onClick={() => navigation("/", { replace: true })}
+        title={"Do Did Done"}
+      />
       {session ? (
         <div
           style={{
@@ -101,21 +98,21 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              <SupabaseAuthHandler>
                 <DailyActivityTracker />
-              </ProtectedRoute>
+              </SupabaseAuthHandler>
             }
           />
           <Route path="/login" element={<Login />} />
           <Route
             path="/mypage"
             element={
-              <ProtectedRoute>
+              <SupabaseAuthHandler>
                 <Account />
-              </ProtectedRoute>
+              </SupabaseAuthHandler>
             }
           />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </SessionContext.Provider>
     </div>

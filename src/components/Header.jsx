@@ -1,9 +1,11 @@
 import "./Header.css";
 
-const Header = ({ title }) => {
+const Header = ({ title, onClick }) => {
   return (
     <div className="Header">
-      <div className="title">{title}</div>
+      <span onClick={onClick} className="title">
+        {title}
+      </span>
     </div>
   );
 };
